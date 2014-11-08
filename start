@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+start_service() {
+  node index.js
+}
+
+main() {
+  start_service
+}
+
+main
