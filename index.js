@@ -1,5 +1,6 @@
 var express = require('express'),
-    app = express();
+    app     = express(),
+    dogapi  = require('dogapi');
 
 app.get('/', function(req, res) {
   res.send('Hello');
