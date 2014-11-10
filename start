@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+install_dependencies() {
+  /usr/bin/env npm --verbose install
+}
+
 start_service() {
-  node index.js
+  /usr/bin/env nodejs index.js
 }
 
 main() {
+  install_dependencies
   start_service
 }
 
