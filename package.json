@@ -9,7 +9,7 @@
       "email" : "jon.niesen@gmail.com"
     }
   ],
-  "script"       : {
+  "scripts"       : {
     "start" : "node index.js"
   },
   "keywords"     : [
