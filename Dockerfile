@@ -7,6 +7,7 @@ RUN apt-get install -y npm
 
 EXPOSE 3000
 
+COPY ./ /srv/github_pipe_datadog
 WORKDIR /srv/github_pipe_datadog
 
 CMD ["./start"]
