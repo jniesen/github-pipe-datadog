@@ -1,41 +1,67 @@
-var express = require('express'),
-    app     = express(),
-    dogapi  = require('dogapi');
+var Hapi   = require('hapi'),
+    server = new Hapi.Server('0.0.0.0', '3000'),
+    dogapi = require('dogapi');
 
-app.get('/', function(req, res) {
-  res.send('Hello');
+server.route({
+  method  : 'GET',
+  path    : '/',
+  handler : function(request, reply) {
+    reply('Hello world');
+  }
 });
 
-app.post('/pushEvent', function(req, res) {
-  var dd = new dogapi();
+var formatCommits = function(commits) {
+  var formattedText = "";
 
-  var event = {
-    'title' : 'Testing',
-    'text'  : 'Only a test.'
-  };
+  for (var i in commits) {
+    formattedText += "- " +commits[i]['message'] + "\n";
+  }
 
-  console.log('Event received: ', event);
+  return formattedText;
+}
 
-  dd.add_event(event, function(error, result, status_code) {
-    if (error) {
-      res.send('There was an issue creating your event.');
-      console.log('Error: ', error);
-      console.log('Status: ', status_code);
-      return;
-    }
+server.route({
+  method  : 'POST',
+  path    : '/pushEvent',
+  handler : function(req, res) {
+    var dd     = new dogapi(),
+        push   = req.payload;
 
-    if (status_code == 200) {
-      console.log('Result: ', result);
-      res.send('Event created');
-      return;
-    }
-  });
+    var pusher  = push['pusher']['name'],
+        app     = push['repository']['name'],
+        repo    = push['repository']['full_name'],
+        commits = push['commits'];
+
+    var event = {
+      'title'      : pusher + " pushed to " + repo,
+      'text'       : formatCommits(commits),
+      'priority'   : 'normal',
+      'alert_type' : 'info',
+      'tags'       : [
+          'application:'+app,
+          'github',
+          'type:push'
+      ],
+      'source_type_name' : 'git'
+    };
+
+    dd.add_event(event, function(error, result, status_code) {
+      if (error) {
+        res('There was an issue sending your event.');
+        console.log('Error: ', error);
+        console.log('Status: ', status_code);
+        return;
+      }
+
+      if (status_code == 202) {
+        res(result);
+        return;
+      }
+    });
+  }
 });
 
-var server = app.listen(3000, function() {
-  var host = server.address().address,
-      port = server.address().port;
-
-  console.log('github | datadog is listening at http://%s:%s', host, port);
+server.start(function() {
+  console.log('github | datadog is listening at %s', server.info.uri);
 });
 

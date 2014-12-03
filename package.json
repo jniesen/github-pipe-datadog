@@ -1,24 +1,25 @@
 {
-  "name"         : "github-pipe-datadog",
-  "version"      : "0.0.1",
-  "description"  : "A simple micro-service that takes a github push event and turns it into a datadog event.",
-  "author"       : "Jonathan Niesen <jon.niesen@gmail.com>",
-  "contributors" : [
+  "name": "github-pipe-datadog",
+  "version": "0.0.1",
+  "description": "A simple micro-service that takes a github push event and turns it into a datadog event.",
+  "author": "Jonathan Niesen <jon.niesen@gmail.com>",
+  "contributors": [
     {
-      "name"  : "Jonathan Niesen",
-      "email" : "jon.niesen@gmail.com"
+      "name": "Jonathan Niesen",
+      "email": "jon.niesen@gmail.com"
     }
   ],
-  "scripts"       : {
-    "start" : "node index.js"
+  "scripts": {
+    "start": "node index.js"
   },
-  "keywords"     : [
+  "keywords": [
     "github",
     "datadog",
     "events"
   ],
-  "dependencies" : {
-    "dogapi"  : "0.1.5",
-    "express" : "4.10.1"
+  "dependencies": {
+    "body-parser": "1.9.2",
+    "dogapi": "0.1.5",
+    "hapi": "^7.5.2"
   }
 }
