@@ -1,6 +1,7 @@
 var Hapi   = require('hapi'),
     server = new Hapi.Server('0.0.0.0', '3000'),
-    dogapi = require('dogapi');
+    dogapi = require('dogapi'),
+    fs     = require('fs');
 
 server.route({
   method  : 'GET',
@@ -20,12 +21,31 @@ var formatCommits = function(commits) {
   return formattedText;
 }
 
+var logPath = function() {
+  var timestamp = Math.floor(new Date() / 1000),
+      dir       = '/srv/github_pipe_datadog/requests/';
+
+  return dir + timestamp + '.log'
+}
+
+var logRequest = function(request) {
+  var out = fs.createWriteStream(logPath(), {
+    flags: 'w',
+    mode: 0666
+  });
+
+  out.end(JSON.stringify(request));
+}
+
 server.route({
   method  : 'POST',
   path    : '/pushEvent',
   handler : function(req, res) {
     var dd     = new dogapi(),
         push   = req.payload;
+
+    console.log(push);
+    logRequest(push);
 
     var pusher  = push['pusher']['name'],
         app     = push['repository']['name'],
@@ -45,19 +65,19 @@ server.route({
       'source_type_name' : 'git'
     };
 
-    dd.add_event(event, function(error, result, status_code) {
-      if (error) {
-        res('There was an issue sending your event.');
-        console.log('Error: ', error);
-        console.log('Status: ', status_code);
-        return;
-      }
+    //dd.add_event(event, function(error, result, status_code) {
+    //  if (error) {
+    //    res('There was an issue sending your event.');
+    //    console.log('Error: ', error);
+    //    console.log('Status: ', status_code);
+    //    return;
+    //  }
 
-      if (status_code == 202) {
-        res(result);
-        return;
-      }
-    });
+    //  if (status_code == 202) {
+    //    res(result);
+    //    return;
+    //  }
+    //});
   }
 });
 
