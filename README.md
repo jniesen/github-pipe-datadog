@@ -18,7 +18,7 @@ On workstation (dev docker host):
 git clone git@github.com:jniesen/github-pipe-datadog.git
 docker pull jniesen/github-pipe-datadog
 docker run -i -t \
-  -v $(pwd):/srv/githup_pipe_datadog \
+  -v $(pwd):/srv/github_pipe_datadog \
   -e DD_API_KEY=[Your Account's Datadog API Key] \
   -e DD_APP_KEY=[Your App's Datadog API Key] \
   -p [Open Host Port]:3000 jniesen/github-pipe-datadog \
