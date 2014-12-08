@@ -10,4 +10,6 @@ EXPOSE 3000
 COPY ./ /srv/github_pipe_datadog
 WORKDIR /srv/github_pipe_datadog
 
+RUN mkdir requests
+
 CMD ["./start"]
