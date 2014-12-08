@@ -133,10 +133,10 @@ server.route({
 
     logRequest(push, logPath(reqLogDir));
 
-    var pusher  = push['pusher']['name'],
-        app     = push['repository']['name'],
-        repo    = push['repository']['full_name'],
-        commits = push['commits'];
+    var pusher  = push['payload']['pusher']['name'],
+        app     = push['payload']['repository']['name'],
+        repo    = push['payload']['repository']['full_name'],
+        commits = push['payload']['commits'];
 
     var event = {
       'title'      : pusher + " pushed to " + repo,
