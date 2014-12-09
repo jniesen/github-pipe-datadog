@@ -122,7 +122,7 @@ server.route({
   path    : '/pushEvent',
   handler : function(req, res) {
     var dd     = new dogapi(),
-        push   = req.payload;
+        push   = JSON.parse(req.payload['payload']);
 
     logFiles(reqLogDir, function(files) {
       var logCnt = logCount(files);
@@ -133,10 +133,10 @@ server.route({
 
     logRequest(push, logPath(reqLogDir));
 
-    var pusher  = push['payload']['pusher']['name'],
-        app     = push['payload']['repository']['name'],
-        repo    = push['payload']['repository']['full_name'],
-        commits = push['payload']['commits'];
+    var pusher  = push['pusher']['name'],
+        app     = push['repository']['name'],
+        repo    = push['repository']['full_name'],
+        commits = push['commits'];
 
     var event = {
       'title'      : pusher + " pushed to " + repo,
