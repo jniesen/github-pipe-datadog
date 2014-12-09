@@ -135,7 +135,7 @@ server.route({
 
     var pusher  = push['pusher']['name'],
         app     = push['repository']['name'],
-        repo    = push['repository']['full_name'],
+        repo    = push['repository']['organization'] + '/' + app,
         commits = push['commits'];
 
     var event = {
